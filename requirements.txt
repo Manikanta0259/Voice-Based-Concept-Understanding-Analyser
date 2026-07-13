@@ -1,0 +1,13 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
+streamlit
+torchvision
+openai-whisper
+sentence-transformers
+librosa
+soundfile
+numpy
+matplotlib
+reportlab
+pytest
+static-ffmpeg
