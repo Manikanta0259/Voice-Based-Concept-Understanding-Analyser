@@ -1,6 +1,9 @@
-import static_ffmpeg
-# Add FFmpeg binaries to system PATH dynamically
-static_ffmpeg.add_paths()
+try:
+    import static_ffmpeg
+    # Add FFmpeg binaries to system PATH dynamically
+    static_ffmpeg.add_paths()
+except Exception as e:
+    print(f"Warning: static_ffmpeg failed to set up paths: {e}. Falling back to system FFmpeg.")
 
 import librosa
 import soundfile as sf
