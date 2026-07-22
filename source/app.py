@@ -21,35 +21,55 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom Premium Styling (Glassmorphism & Clean Accents)
+# Custom Theme-Aware Styling (Supports Light & Dark Modes)
 st.markdown("""
 <style>
-    /* Main Layout Styling */
-    .main {
-        background-color: #0e1117;
-        color: #f8fafc;
-    }
-    
-    /* Card Container */
+    /* Card Container - Theme Aware */
     .metric-card {
-        background: rgba(30, 41, 59, 0.45);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        background-color: var(--secondary-background-color);
+        border: 1px solid rgba(128, 128, 128, 0.2);
         border-radius: 12px;
         padding: 20px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         margin-bottom: 20px;
+        color: var(--text-color);
     }
     
-    /* Status Headers */
+    /* Card Subtext / Muted text */
+    .card-muted-text {
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-top: 8px;
+        margin-bottom: 12px;
+        color: var(--text-color);
+        opacity: 0.88;
+    }
+    
+    .card-label-muted {
+        margin: 0;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--text-color);
+        opacity: 0.7;
+        letter-spacing: 0.5px;
+    }
+    
+    /* Status Banner - High Contrast in both modes */
     .banner-success {
-        background-color: rgba(16, 185, 129, 0.15);
+        background-color: rgba(16, 185, 129, 0.12);
         border: 1px solid rgba(16, 185, 129, 0.3);
         border-radius: 8px;
-        color: #10b981;
+        color: #047857;
         padding: 12px;
         font-weight: bold;
         text-align: center;
         margin-bottom: 20px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .banner-success {
+            color: #34d399;
+        }
     }
     
     /* Score display */
@@ -68,40 +88,46 @@ st.markdown("""
         font-size: 0.9rem;
     }
     
-    /* Tag Styling */
+    /* Tag Styling - Accessible contrast in Light and Dark mode */
     .tag-matched {
         background-color: rgba(16, 185, 129, 0.15);
-        color: #34d399;
-        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: #047857;
+        border: 1px solid rgba(16, 185, 129, 0.35);
         padding: 4px 10px;
         border-radius: 6px;
         font-size: 0.85rem;
         display: inline-block;
         margin: 4px;
-        font-weight: 500;
+        font-weight: 600;
     }
     
     .tag-missed {
-        background-color: rgba(239, 68, 68, 0.12);
-        color: #f87171;
-        border: 1px solid rgba(239, 68, 68, 0.25);
+        background-color: rgba(239, 68, 68, 0.15);
+        color: #dc2626;
+        border: 1px solid rgba(239, 68, 68, 0.35);
         padding: 4px 10px;
         border-radius: 6px;
         font-size: 0.85rem;
         display: inline-block;
         margin: 4px;
-        font-weight: 500;
+        font-weight: 600;
     }
-    
-    /* Header Typography */
-    h1, h2, h3 {
-        color: #f8fafc !important;
+
+    .tag-keyword {
+        background-color: rgba(99, 102, 241, 0.15);
+        color: #4f46e5;
+        border: 1px solid rgba(99, 102, 241, 0.35);
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        display: inline-block;
+        margin: 4px;
+        font-weight: 600;
     }
-    
-    /* Custom Sidebar styling */
-    section[data-testid="stSidebar"] {
-        background-color: #0f172a;
-        border-right: 1px solid rgba(255, 255, 255, 0.05);
+
+    /* Ensure all headings inherit theme-aware text color */
+    h1, h2, h3, h4, h5, h6 {
+        color: var(--text-color) !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -287,7 +313,7 @@ if active_display_result_id is not None:
         
         st.markdown(f"""
         <div class="metric-card" style="text-align: center;">
-            <p style="margin:0; font-size:1rem; color:#94a3b8; font-weight:bold;">UNDERSTANDING SCORE</p>
+            <p class="card-label-muted">UNDERSTANDING SCORE</p>
             <div class="score-value" style="color: {level_color};">{detail['overall_score']:.1f}/100</div>
             <div class="level-badge" style="background-color: {level_color}20; color: {level_color}; border: 1px solid {level_color}50;">
                 {detail['understanding_level']}
@@ -378,10 +404,10 @@ else:
             st.markdown(f"""
             <div class="metric-card">
                 <strong>Target Description:</strong><br>
-                <p style="font-size: 0.95rem; line-height: 1.5; margin-top: 8px; color: #cbd5e1;">{reference_explanation}</p>
+                <p class="card-muted-text">{reference_explanation}</p>
                 <strong>Required Keywords:</strong><br>
                 <div style="margin-top: 6px;">
-                    {' '.join([f'<span class="tag-matched" style="background-color:rgba(99,102,241,0.12); color:#818cf8; border:1px solid rgba(99,102,241,0.25);"># {k}</span>' for k in reference_keywords])}
+                    {' '.join([f'<span class="tag-keyword"># {k}</span>' for k in reference_keywords])}
                 </div>
             </div>
             """, unsafe_allow_html=True)
